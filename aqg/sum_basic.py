@@ -5,6 +5,7 @@ Code: Bo
 """
 from __init__ import *
 
+
 import sys
 reload(sys)  
 sys.setdefaultencoding('utf8')
@@ -145,7 +146,7 @@ class SumBasic:
 		sentences_cleaned = self._clean_sentences(sentences)
 
 		distribution = self._word_distribution(sentences_cleaned)
-		
+
 		sentence_weight = self._sentence_weight(distribution, sentences_cleaned)
 
 		important_sentences = self._topically_important_sentence(sentence_weight, sentences)
