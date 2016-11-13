@@ -15,13 +15,6 @@ class SumBasic:
 		self.fr = File_Reader()
 		self.ratio = config.sentence_ratio
 
-	def _load_files(self):
-		"""Load all files from path in config.py
-		Return:
-			file_names: list of file names
-		"""
-		return self.fr.load_file_names()
-
 	def _load_sentences(self, file_name):
 		"""Load sentences from given document
 		Args:
