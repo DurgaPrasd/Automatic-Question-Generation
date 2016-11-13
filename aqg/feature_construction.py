@@ -67,3 +67,20 @@ class Feature_Construction:
 	        row['Percentage_Token_In_Answer'] = 0
 	    	return row
 
+	def _percentage_token_in_out_answer(self, row):
+		"""Percent of the sentence tokens that are in the answer (exclude answer length)
+		Args:
+		    row(pandas.dataframe): input pandas dataframe
+		Returns:
+		    row(pandas.dataframe): result a pandas dataframe with new feature
+		"""
+	    answer_len = row.Num_Tokens_In_Answer
+	    sentence_len = row.Num_Tokens_In_Sentence
+	    try:
+	        ratio = float(answer_len)/sentence_len 
+	        row['Percentage_Token_In_Out_Answer'] = ratio
+	        return row
+	    except:
+	        row['Percentage_Token_In_Out_Answer'] = 0
+	        return row
+
