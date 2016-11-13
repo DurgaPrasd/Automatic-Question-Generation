@@ -9,38 +9,61 @@ class Feature_Construction:
 	    Args:
 	        row(pandas.dataframe): input pandas dataframe
 	    Return:
-	        row(int): return number of tokens in answer(gap)
+	        row(pandas.dataframe): return number of tokens in answer(gap)
 	    """
 	    answer = row.Answer
 	    try:
-	        return len(answer.split())
+	    	row['Num_Tokens_In_Answer'] = len(answer.split())
+	    	return row
 	    except:
-	        return 0
+	        row['Num_Tokens_In_Answer'] = 0
+	    	return row
 
 	def _num_token_in_sentence(self, row):
 		"""Count number of features in sentence
 		Args:
 		    row(pandas.dataframe): input pandas dataframe
 		Returns:
-		    row(int): number of tokens in sentence (question)
+		    row(pandas.dataframe): number of tokens in sentence (question)
 		"""
 		question = row.Question
 	    try:
-	        return len(question.split())
+	        row['Num_Tokens_In_Sentence'] = len(question.split())
+	        return row
 	    except:
-	        return 0
+	        row['Num_Tokens_In_Sentence'] = 0
+	    	return row
 
-	def _percentage_token_in_answer(self, df):
+	def _num_row_tokens_matching_in_out(self, row):
+		"""Number of tokens in the answer that match tokens outside of the answer
+	    Args:
+	        df(pandas.dataframe): input pandas dataframe
+	    Returns:
+	        df(pandas.dataframe): result a pandas dataframe with new feature
+	    """
+	    try:
+		    answer = row.Answer
+		    question = row.Question
+		    intersection = [i for i in answer_tokens if i in question]
+		    row['Num_Token_Match_Question'] = len(intersection)
+		    return row
+		except:
+			row['Num_Token_Match_Question'] = 0
+			return row
+
+	def _percentage_token_in_answer(self, row):
 		"""Percent of the sentence tokens that are in the answer (exclude answer length)
 		Args:
-		    df(pandas.dataframe): input pandas dataframe
+		    row(pandas.dataframe): input pandas dataframe
 		Returns:
-		    df(pandas.dataframe): result a pandas dataframe with new feature
+		    row(pandas.dataframe): result a pandas dataframe with new feature
 		"""
 	    answer_len = row.Num_Tokens_In_Answer
 	    sentence_len = row.Num_Tokens_In_Sentence - answer_len
 	    try:
-	        return float(answer_len)/sentence_len
+	        row['Percentage_Token_In_Answer'] = float(answer_len)/sentence_len
+	        return row
 	    except:
-	        return 0
+	        row['Percentage_Token_In_Answer'] = 0
+	    	return row
 
