@@ -1,4 +1,10 @@
 from sentence_selection import SentenceSelection
+from gap_selection import GapSelection
+from feature_construction import FeatureConstruction
 
 ss = SentenceSelection()
-print ss.prepare_sentences("/root/1.txt")
+sentences = ss.prepare_sentences("/Users/wbcha/Desktop/project/Automatic_Question_Generation/tests/obama.txt")
+gs = GapSelection()
+candidates = gs.get_candidates(sentences)
+# fc = FeatureConstruction()
+# fc.built_features(candidates)
