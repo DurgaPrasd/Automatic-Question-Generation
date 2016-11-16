@@ -6,19 +6,16 @@ Code:
 """
 from __init__ import *
 from nltk.parse import stanford
-
 from sentence_selection import SentenceSelection
 
-class Gap_Selection:
+class GapSelection:
 	def __init__(self):
-		os.environ['STANFORD_PARSER'] = config.STANFORD_JARS
-		os.environ['STANFORD_MODELS'] = config.STANFORD_JARS
-		self.model_path = config.STANFORD_JARS + 'englishPCFG.ser.gz'
-		self.classifier = config.CLASSIFIER_PATH
-		self.sb = SumBasic()
-		self.fw = File_Writer()
+		os.environ['STANFORD_PARSER'] = os.environ.get('STANFORD_JARS')
+		os.environ['STANFORD_MODELS'] = os.environ.get('STANFORD_JARS')
+		self.model_path = os.environ.get('STANFORD_JARS') + 'englishPCFG.ser.gz'
+		self.classifier = os.environ.get('CLASSIFIER_PATH')
 
-	def prepare_parser(self):
+	def _prepare_parser(self):
 		"""Prepare stanford parser
 		Args:
 		Return:
@@ -27,7 +24,18 @@ class Gap_Selection:
 		parser = stanford.StanfordParser(model_path=self.model_path)
 		return parser
 
-	def extract_gaps(self, sentence, tree):
+	def _parse(self, sentence):
+		"""Parse sentence into an syntatic tree
+		Args:
+		    sentence(str): string of current sentence 
+		Return:
+		    parsed_sentence(list):list of Tree object syntactic tree
+		"""
+		parser = self._prepare_parser()
+		parsed_sentence = list(parser.raw_parse((sentence)))
+		return parsed_sentence
+
+	def _extract_gaps(self, sentence, tree):
 		"""Extract nouns, np, adjp from tree object
 		Args:
 		    sentence(str): current sentence
@@ -55,42 +63,27 @@ class Gap_Selection:
 		        	candidates.append(candidate)
 		        candidate = {}
 		    return candidates
-
-
-    def parse(self, sentence):
-		"""Parse sentence into an syntatic tree
-		Args:
-		    sentence(str): string of current sentence 
-		Return:
-		    parsed_sentence(list):list of Tree object syntactic tree
-		"""
-		parser = self.prepare_parser()
-		parsed_sentence = list(parser.raw_parse((sentence)))
-		return parsed_sentence
 	
-	def get_candidates(self, file_name):
+	def get_candidates(self, sentences):
 		"""Main function, prepare sentences, parse sentence, extract gap
 		Args:
-		    file_name(str): string of file name
+		    sentences(dict): topically important sentences
 		Returns:
 			candidates(list of dict): list of dictionary, e.g.
 			[{'Sentence': .....,'Question':.....,'Answer':...},...]
 		"""
 		candidates = []
-		#prepare sentences
-		sentences = self.prepare_sentences(file_name)
 		for sentence_id,sentence in sentences.items():
-		    #parse
 		    try:
-		        tree = self.parse(sentence)
-		    except:
+		        tree = self._parse(sentence)
+		    except Exception, e:
+		    	print str(e)
 		        continue
-		    #build candidate questions
-		    current_sentence_candidates = self.extract_gaps(sentence, tree)
-		    if current_sentence_candidates==False:
+		    current_sentence_candidates = self._extract_gaps(sentence, tree) #build candidate questions
+		    if current_sentence_candidates == False:
 		        continue
 		    candidates = candidates + current_sentence_candidates
-		    print "building question/gap pairs %d" % len(candidates)
+		    print "building candidate question/answer pairs %d" % len(candidates)
 		    #clear current_sentence_candidates
 		    current_sentence_candidates = []
 		return candidates
