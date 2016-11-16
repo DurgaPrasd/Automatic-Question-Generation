@@ -1,5 +1,5 @@
 nltk >= 3.2.1 
-numpy >= 1.10.4
+numpy >= 1.6.1
 pandas >= 0.18.0
 scikit-learn >= 0.17.1
 python-dotenv == 0.6.0
