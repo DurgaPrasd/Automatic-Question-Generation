@@ -1,6 +1,6 @@
 # Automatic Gap-Filling Question Generator
 
-[![CircleCI](https://circleci.com/gh/bwanglzu/QA-Crawler/tree/master.svg?style=shield&circle-token=:circle-token)](https://circleci.com/gh/bwanglzu/QA-Crawler/tree/master)
+[![CircleCI](https://circleci.com/gh/bwanglzu/Automatic_Question_Generation.svg?style=shield&circle-token=:circle-token)](https://circleci.com/gh/bwanglzu/Automatic_Question_Generation)
 [![Requirements Status](https://requires.io/github/bwanglzu/QA-Crawler/requirements.svg?branch=master)](https://requires.io/github/bwanglzu/QA-Crawler/requirements/?branch=master)
 
 Learning to generate Gap-Filling questions from teaching material.
