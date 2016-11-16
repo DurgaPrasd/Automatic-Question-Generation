@@ -203,6 +203,85 @@ class FeatureConstruction:
 			row['ANSWER_STARTS_WITH_QUANTIFIER'] = 0
 			return row
 
+	def _answer_quantifier_density(self, row):
+		"""Percentage of tokens in the answer that are quantifier words
+		Args:
+		    row(pandas.dataframe): input pandas dataframe
+		Return:
+		    row(pandas.dataframe): result a pandas dataframe with new feature
+		"""
+		answer = row.Answer 
+		try:
+			tokens = answer.split()
+			answer_len = len(tokens)
+			quantifier_tokens = [i for i in tokens if i in ling.QUANTIFIER_WORDS]
+			quantifier_tokens_len = len(quantifier_tokens)
+			row['ANSWER_QUANTIFIER_DENSITY'] = float(quantifier_tokens_len)/answer_len
+			return row 
+		except:
+			row['ANSWER_QUANTIFIER_DENSITY'] = 0
+			return row
+
+	def _percentage_capitalized_word_in_answer(self, row):
+		"""Percentage of capitalized words in the sentence that are in the answer
+		Args:
+		    row(pandas.dataframe): input pandas dataframe
+		Return:
+		    row(pandas.dataframe): result a pandas dataframe with new feature
+		"""
+		answer = row.Answer
+		sentence = row.Sentence 
+		try:
+			tokens = sentence.split()
+			num_tokens = len(tokens)
+			cap_tokens = [i for i in tokens if i.isupper()==True]
+			cap_tokens_in_answer = [i for i in cap_tokens if i in answer]
+			row['PERCENT_CAPITALIZED_WORDS_IN_ANSWER'] = float(len(cap_tokens_in_answer))/num_tokens
+			return row 
+		except:
+			row['PERCENT_CAPITALIZED_WORDS_IN_ANSWER'] = 0
+			return row
+
+	def _percentage_pronoun_in_answer(self, row):
+		"""Percentage of pronouns in the sentence that are in the answer
+		Args:
+		    row(pandas.dataframe): input pandas dataframe
+		Return:
+		    row(pandas.dataframe): result a pandas dataframe with new feature
+		"""
+		answer = row.Answer
+		sentence = row.Sentence
+		try:
+			pronoun_in_sentence, sentence_len = self._identify_pronoun2(sentence)
+			pronoun_in_sentence_in_answer = [i for i in pronoun_in_sentence if i in answer]
+			num_pronoun_in_sentence_in_answer = len(pronoun_in_sentence_in_answer)
+			row['PERCENT_PRONOMINALS_IN_ANSWER'] = float(num_pronoun_in_sentence_in_answer)/sentence_len
+			return row 
+		except:
+			row['PERCENT_PRONOMINALS_IN_ANSWER'] = 0
+			return row
+
+	def _identify_pronoun2(self, sentence):
+		"""Calculate percentage of pronouns in the sentence that are in the answer
+		Args:
+		    sentence(str): question sentence 
+		Return:
+		    pronoun_in_sentence(list): pronouns in sentence 
+		    sentence_len(int): length of current sentence 
+		"""
+		text = nltk.word_tokenize(sentence)
+		post = nltk.pos_tag(text)
+		pronoun_list = ['PRP', 'PRP$', 'WP', 'WP$']
+		pronoun_in_sentence = []
+		sentence_len = len(post)
+		for k, v in post:
+			if v in pronoun_list:
+				pronoun_in_sentence.append(k)
+		return pronoun_in_sentence, sentence_len
+
+
+
+
 
 
 	def build_feature(self, candidates):
@@ -223,6 +302,10 @@ class FeatureConstruction:
 			row = self._answer_capitalized_word_density(row)
 			row = self._answer_stop_word_density(row)
 			row = self._answer_end_with_quantifier(row)
+			row = self._answer_start_with_quantifier(row)
+			row = self._answer_quantifier_density(row)
+			row = self._percentage_capitalized_word_in_answer(row)
+			row = self._percentage_pronoun_in_answer(row)
 			print row
 
 
