@@ -10,17 +10,10 @@ import sys
 reload(sys)  
 sys.setdefaultencoding('utf8')
 
-class SumBasic:
+class SentenceSelection:
 	def __init__(self):
 		self.fr = File_Reader()
-		self.ratio = config.sentence_ratio
-
-	def _load_files(self):
-		"""Load all files from path in config.py
-		Return:
-			file_names: list of file names
-		"""
-		return self.fr.load_file_names()
+		self.ratio = os.environ.get("SENTENCE_RATIO")
 
 	def _load_sentences(self, file_name):
 		"""Load sentences from given document
@@ -112,7 +105,7 @@ class SumBasic:
 		"""
 		sentence_length = len(sentence_weight)
 		#how many sentences to retain
-		num_sentences_selected = math.ceil(self.ratio * sentence_length)
+		num_sentences_selected = math.ceil(float(self.ratio) * sentence_length)
 		num_sentences_selected = int(num_sentences_selected)
 		#key of selected sentences
 		sentences_selected_key = []
