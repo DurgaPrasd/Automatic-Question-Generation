@@ -60,7 +60,7 @@ class FeatureConstruction:
 		    row(pandas.dataframe): result a pandas dataframe with new feature
 		"""
 		answer_len = row.Num_Tokens_In_Answer
-		sentence_len = row.Num_Tokens_In_Sentence - answer_len
+		sentence_len = row.Num_Tokens_In_Sentence + answer_len
 		try:
 			row['Percentage_Token_In_Answer'] = float(answer_len)/sentence_len
 			return row
@@ -312,7 +312,7 @@ class FeatureConstruction:
 		"""
 		question = row.Question 
 		try:
-			first_tagger = _first_tagger_after_answer_span(question)
+			first_tagger = self._first_tagger_after_answer_span(question)
 			if first_tagger == flag:
 				return 1
 			else:
@@ -343,7 +343,7 @@ class FeatureConstruction:
 		"""
 		question = row.Question
 		try:
-			first_tagger = _first_tagger_before_answer_span(question)
+			first_tagger = self._first_tagger_before_answer_span(question)
 			if first_tagger == flag:
 				return 1
 			else:
@@ -375,7 +375,7 @@ class FeatureConstruction:
 		"""
 		answer = row.Answer 
 		try:
-			tag_count = _count_token_with_match(answer, flag)
+			tag_count = self._count_token_with_match(answer, flag)
 			return tag_count
 		except:
 			return 0
@@ -407,7 +407,6 @@ class FeatureConstruction:
 		    df(pandas.dataframe): dataframe of question, answer, sentence and features
 		"""
 		df = pd.DataFrame(candidates)
-		print df
 		for idx, row in df.iterrows():
 			row = self._num_token_in_answer(row)
 			row = self._num_token_in_sentence(row)
