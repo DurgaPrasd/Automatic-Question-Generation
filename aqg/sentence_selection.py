@@ -10,7 +10,7 @@ import sys
 reload(sys)  
 sys.setdefaultencoding('utf8')
 
-class SumBasic:
+class SentenceSelection:
 	def __init__(self):
 		self.fr = File_Reader()
 		self.ratio = config.sentence_ratio

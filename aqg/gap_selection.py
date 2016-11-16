@@ -7,7 +7,7 @@ Code:
 from __init__ import *
 from nltk.parse import stanford
 
-from sum_basic import SumBasic
+from sentence_selection import SentenceSelection
 
 class Gap_Selection:
 	def __init__(self):
