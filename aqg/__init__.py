@@ -12,12 +12,12 @@ from sklearn import svm
 from sklearn.externals import joblib
 from practnlptools.tools import Annotator
 
-
-import config
-import linguistic as ling
+import utils.linguistic as ling
 
 from collections import defaultdict
 from collections import OrderedDict
 
-from file_reader import File_Reader
-from file_writer import File_Writer
+from utils.file_reader import File_Reader
+from utils.file_writer import File_Writer
+from dotenv import load_dotenv, find_dotenv
+load_dotenv(find_dotenv())
