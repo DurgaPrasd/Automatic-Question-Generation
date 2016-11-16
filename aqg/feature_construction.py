@@ -279,12 +279,127 @@ class FeatureConstruction:
 				pronoun_in_sentence.append(k)
 		return pronoun_in_sentence, sentence_len
 
+	def _sentence_start_with_discourse(self, row):
+		"""Sentence starts with a discourse connective word, 1 true 0 false
+		Args:
+		    row(pandas.dataframe): input pandas dataframe
+		Return:
+		    row(pandas.dataframe): result a pandas dataframe with new feature
+		"""
+		sentence = row.Sentence 
+		try:
+			tokens = sentence.split()
+			start_tokens = ' '.join(tokens[:3]) # first three terms
+			#check discourse marker is in first three tokens
+			is_discourse = [i for i in ling.DISCOURSE_MARKERS if i in start_tokens]
+			if is_discourse:
+				row['SENTENCE_STARTS_WITH_DISCOURSE_CONNECTIVE'] = 1
+				return row
+			else:
+				row['SENTENCE_STARTS_WITH_DISCOURSE_CONNECTIVE'] = 0
+				return row
+		except:
+			row['SENTENCE_STARTS_WITH_DISCOURSE_CONNECTIVE'] = 0
+			return row
+
+	def _pos1_gram_after_answer(self, row, flag):
+		"""The first POS tag following the answer span is [FLAG]
+		Args:
+		    row(pandas.dataframe): input pandas dataframe
+		    flag(string): symbol to match first tagger
+		Return:
+		    binary(int): 1 match, 0 not match
+		"""
+		question = row.Question 
+		try:
+			first_tagger = _first_tagger_after_answer_span(question)
+			if first_tagger == flag:
+				return 1
+			else:
+				return 0
+		except:
+			return 0
+
+	def _first_tagger_after_answer_span(self, question):
+		"""Get the first tagger after answer span
+		Args:
+		    question(string): string of current question 
+		Return:
+		    tagger(string): tagger of first term after span
+		"""
+		text = nltk.word_tokenize(question)
+		post = nltk.pos_tag(text)
+		index = [i for i,x in enumerate(post) if x == ('_','NNP')]
+		index = max(index) + 1
+		return post[index][1]
+
+	def pos1_gram_before_answer(self, row, flag):
+		"""The first POS tag before the answer span is [FLAG]
+		Args:
+		    row(pandas.dataframe): input pandas dataframe
+		    flag(string): symbol to match first tagger
+		Return:
+		    binary(int): 1 match, 0 not match
+		"""
+		question = row.Question
+		try:
+			first_tagger = _first_tagger_before_answer_span(question)
+			if first_tagger == flag:
+				return 1
+			else:
+				return 0
+		except:
+			return 0
+
+	def _first_tagger_before_answer_span(self, question):
+		"""Get the first tagger before answer span
+		Args:
+		    question(string): string of current question 
+		Return:
+		    tagger(string): tagger of first term before span
+		"""
+		text = nltk.word_tokenize(question)
+		post = nltk.pos_tag(text)
+		index = [i for i,x in enumerate(post) if x == ('_','NNP')]
+		index = min(index) - 1
+		return post[index][1]
+
+
+	def _pos_gram_count_answer(self, row, flag):
+		"""Count pos tagger within answer that match [FLAG]
+		Args:
+		    row(pandas.dataframe): dataframe of current row
+		    flag(string): [FLAG] to match answer
+		Return:
+		    count(int): number of match
+		"""
+		answer = row.Answer 
+		try:
+			tag_count = _count_token_with_match(answer, flag)
+			return tag_count
+		except:
+			return 0
+
+	def _count_token_with_match(answer, match):
+		"""Count answer match FLAG 
+		"""
+		text = nltk.word_tokenize(answer)
+		post = nltk.pos_tag(text)
+		count = 0
+		for k, v in post:
+			if v == match:
+				count +=1
+		return count 
 
 
 
 
 
-	def build_feature(self, candidates):
+
+
+
+
+	def extract_feature(self, candidates):
 		"""Build feature dataframe
 		Args:
 		    candidates(list): candidate question answer pairs
@@ -306,6 +421,42 @@ class FeatureConstruction:
 			row = self._answer_quantifier_density(row)
 			row = self._percentage_capitalized_word_in_answer(row)
 			row = self._percentage_pronoun_in_answer(row)
+			row = self._sentence_start_with_discourse(row)
+			row['GRAM_AFTER_ANSWER_quoation'] = self._pos1_gram_after_answer(row, "'")
+			row['GRAM_AFTER_ANSWER_comma'] = self._pos1_gram_after_answer(row, ",")
+			row['GRAM_AFTER_ANSWER_LRB'] = self._pos1_gram_after_answer(row, "LRB")
+			row['GRAM_AFTER_ANSWER_RRB'] = self._pos1_gram_after_answer(row, "RRB")
+			row['GRAM_AFTER_ANSWER_Stop'] = self._pos1_gram_after_answer(row, ".")
+			row['GRAM_AFTER_ANSWER_Colon'] = self._pos1_gram_after_answer(row, ":")
+			row['GRAM_AFTER_ANSWER_CC'] = self._pos1_gram_after_answer(row, "CC")
+			row['GRAM_AFTER_ANSWER_CD'] = self._pos1_gram_after_answer(row, "CD")
+			row['GRAM_AFTER_ANSWER_DT'] = self._pos1_gram_after_answer(row, "DT")
+			row['GRAM_AFTER_ANSWER_EX'] = self._pos1_gram_after_answer(row, "EX")
+			row['GRAM_AFTER_ANSWER_IN'] = self._pos1_gram_after_answer(row, "IN")
+			row['GRAM_AFTER_ANSWER_JJ'] = self._pos1_gram_after_answer(row, "JJ")
+			row['GRAM_AFTER_ANSWER_JJR'] = self._pos1_gram_after_answer(row, "JJR")
+			row['GRAM_AFTER_ANSWER_JJS'] = self._pos1_gram_after_answer(row, "JJS")
+			row['GRAM_AFTER_ANSWER_MD'] = self._pos1_gram_after_answer(row, "MD")
+			row['GRAM_AFTER_ANSWER_NN'] = self._pos1_gram_after_answer(row, "NN")
+			row['GRAM_AFTER_ANSWER_NNP'] = self._pos1_gram_after_answer(row, "NNP")
+			row['GRAM_AFTER_ANSWER_NNPS'] = self._pos1_gram_after_answer(row, "NNPS")
+			row['GRAM_AFTER_ANSWER_NNS'] = self._pos1_gram_after_answer(row, "NNS")
+			row['GRAM_AFTER_ANSWER_POS'] = self._pos1_gram_after_answer(row, "POS")
+			row['GRAM_AFTER_ANSWER_PRP'] = self._pos1_gram_after_answer(row, "PRP")
+			row['GRAM_AFTER_ANSWER_RB'] = self._pos1_gram_after_answer(row, "RB")
+			row['GRAM_AFTER_ANSWER_RBR'] = self._pos1_gram_after_answer(row, "RBR")
+			row['GRAM_AFTER_ANSWER_RBS'] = self._pos1_gram_after_answer(row, "RBS")
+			row['GRAM_AFTER_ANSWER_RP'] = self._pos1_gram_after_answer(row, "RP")
+			row['GRAM_AFTER_ANSWER_TO'] = self._pos1_gram_after_answer(row, "TO")
+			row['GRAM_AFTER_ANSWER_VB'] = self._pos1_gram_after_answer(row, "VB")
+			row['GRAM_AFTER_ANSWER_VBD'] = self._pos1_gram_after_answer(row, "VBD")
+			row['GRAM_AFTER_ANSWER_VBG'] = self._pos1_gram_after_answer(row, "VBG")
+			row['GRAM_AFTER_ANSWER_VBN'] = self._pos1_gram_after_answer(row, "VBN")
+			row['GRAM_AFTER_ANSWER_VBP'] = self._pos1_gram_after_answer(row, "VBP")
+			row['GRAM_AFTER_ANSWER_VBZ'] = self._pos1_gram_after_answer(row, "VBZ")
+			row['GRAM_AFTER_ANSWER_WDT'] = self._pos1_gram_after_answer(row, "WDT")
+			row['GRAM_AFTER_ANSWER_WP'] = self._pos1_gram_after_answer(row, "WP")
+			row['GRAM_AFTER_ANSWER_WRB'] = self._pos1_gram_after_answer(row, "WRB")
 			print row
 
 

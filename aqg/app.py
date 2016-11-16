@@ -9,4 +9,4 @@ gs = GapSelection()
 candidates = gs.get_candidates(sentences)
 print candidates
 fc = FeatureConstruction()
-print fc.build_feature(candidates)
+print fc.extract_feature(candidates)
