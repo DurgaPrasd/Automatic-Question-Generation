@@ -3,7 +3,7 @@ from nltk.corpus import stopwords
 
 class FeatureConstruction:
 	def __init__(self):
-		pass
+		self.classifier = os.environ.get('CLASSIFIER_PATH')
 
 	def _num_token_in_answer(self, row):
 		"""Get number of tokens in answer 
@@ -180,6 +180,27 @@ class FeatureConstruction:
 				return row
 		except:
 			row['ANSWER_ENDS_WITH_QUANTIFIER'] = 0
+			return row
+
+	def _answer_start_with_quantifier(self, row):
+		"""Answer start with a quantifier word (many, few etc) 1 true, 0 false
+		Args:
+		    row(pandas.dataframe): input row vector 
+		Return:
+		    row(pandas.dataframe): output vector with new feature
+		"""
+		answer = row.Answer
+		try:
+			tokens = answer.split()
+			answer_start_token = tokens[0]
+			if answer_start_token in ling.QUANTIFIER_WORDS:
+				row['ANSWER_STARTS_WITH_QUANTIFIER'] = 1
+				return row 
+			else:
+				row['ANSWER_STARTS_WITH_QUANTIFIER'] = 0
+				return row
+		except:
+			row['ANSWER_STARTS_WITH_QUANTIFIER'] = 0
 			return row
 
 
