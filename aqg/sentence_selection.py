@@ -13,7 +13,7 @@ sys.setdefaultencoding('utf8')
 class SentenceSelection:
 	def __init__(self):
 		self.fr = File_Reader()
-		self.ratio = config.sentence_ratio
+		self.ratio = os.environ.get("SENTENCE_RATIO")
 
 	def _load_sentences(self, file_name):
 		"""Load sentences from given document
@@ -105,7 +105,7 @@ class SentenceSelection:
 		"""
 		sentence_length = len(sentence_weight)
 		#how many sentences to retain
-		num_sentences_selected = math.ceil(self.ratio * sentence_length)
+		num_sentences_selected = math.ceil(float(self.ratio) * sentence_length)
 		num_sentences_selected = int(num_sentences_selected)
 		#key of selected sentences
 		sentences_selected_key = []
