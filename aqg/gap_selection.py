@@ -13,7 +13,6 @@ class GapSelection:
 		os.environ['STANFORD_PARSER'] = os.environ.get('STANFORD_JARS')
 		os.environ['STANFORD_MODELS'] = os.environ.get('STANFORD_JARS')
 		self.model_path = os.environ.get('STANFORD_JARS') + 'englishPCFG.ser.gz'
-		self.classifier = os.environ.get('CLASSIFIER_PATH')
 
 	def _prepare_parser(self):
 		"""Prepare stanford parser

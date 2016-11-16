@@ -4,7 +4,9 @@ from feature_construction import FeatureConstruction
 
 ss = SentenceSelection()
 sentences = ss.prepare_sentences("/Users/wbcha/Desktop/project/Automatic_Question_Generation/tests/obama.txt")
+print sentences
 gs = GapSelection()
 candidates = gs.get_candidates(sentences)
-# fc = FeatureConstruction()
-# fc.built_features(candidates)
+print candidates
+fc = FeatureConstruction()
+print fc.build_feature(candidates)
