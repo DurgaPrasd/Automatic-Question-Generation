@@ -1,4 +1,5 @@
 from __init__ import *
+from nltk.corpus import stopwords
 
 class FeatureConstruction:
 	def __init__(self):
@@ -140,6 +141,48 @@ class FeatureConstruction:
 			percentage = 0
 		return percentage
 
+	def _answer_stop_word_density(self, row):
+		"""Percentage of tokens in the answer are stopwords
+		Args:
+		    row(pandas.dataframe): input row vector
+		Return:
+		    row(pandas.dataframe): ouput vector with new feature 
+		"""
+		stop = stopwords.words('english')
+		answer = row.Answer 
+		try:
+			tokens = answer.split()
+			num_tokens = len(tokens)
+			stop_word_in_answer = [i for i in tokens if i in stop]
+			num_stop_word_in_answer = len(stop_word_in_answer)
+			row['ANSWER_STOPWORD_DENSITY'] = float(num_stop_in_answer)/num_tokens
+			return row 
+		except:
+			row['ANSWER_STOPWORD_DENSITY'] = 0
+			return row
+
+	def _answer_end_with_quantifier(self, row):
+		"""Answer ends with a quantifier word (many, few, etc, 1 true, 0 false
+		Args:
+		    row(pandas.dataframe): input row vector 
+		Return:
+		    row(pandas.dataframe): output vector with new feature
+		"""
+		answer = row.Answer
+		try:
+			tokens = answer.split()
+			answer_end_token = tokens[-1]
+			if answer_end_token in ling.QUANTIFIER_WORDS:
+				row['ANSWER_ENDS_WITH_QUANTIFIER'] = 1
+				return row
+			else:
+				row['ANSWER_ENDS_WITH_QUANTIFIER'] = 0
+				return row
+		except:
+			row['ANSWER_ENDS_WITH_QUANTIFIER'] = 0
+			return row
+
+
 
 	def build_feature(self, candidates):
 		"""Build feature dataframe
@@ -157,6 +200,8 @@ class FeatureConstruction:
 			row = self._percentage_token_in_answer(row)
 			row = self._percentage_token_in_out_answer(row)
 			row = self._answer_capitalized_word_density(row)
+			row = self._answer_stop_word_density(row)
+			row = self._answer_end_with_quantifier(row)
 			print row
 
 
