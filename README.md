@@ -9,7 +9,7 @@ Learning to generate Gap-Filling questions from teaching material.
 
 ## Build
 
-- git clone `https://github.com/bwanglzu/Automatic_Question_Generation.git`
+- `git clone https://github.com/bwanglzu/Automatic_Question_Generation.git`
 - `pip install -r requirements.txt`
 - Modify configuration files in ``
 
