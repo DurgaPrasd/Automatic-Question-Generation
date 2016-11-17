@@ -23,7 +23,6 @@ Learning to generate Gap-Filling questions from teaching material.
 
 ```python
 SENTENCE_RATIO = 0.05 #The threshold of important sentences
-
 #Stanford Jars, your folder of STANFORD PARSER
 STANFORD_JARS="/Users/path-to-stanford-parser/stanford-parser-yyyy-mm-dd/"
 #Stanford Name Entity Recognition folder, 
