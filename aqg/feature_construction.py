@@ -1,9 +1,13 @@
 from __init__ import *
 from nltk.corpus import stopwords
+from nltk.tag import StanfordNERTagger
 
 class FeatureConstruction:
 	def __init__(self):
 		self.classifier = os.environ.get('CLASSIFIER_PATH')
+		os.environ['STANFORD_MODELS'] = os.environ.get('STANFORD_NERS')
+		self.st = StanfordNERTagger('english.all.3class.distsim.crf.ser.gz') 
+
 
 	def _num_token_in_answer(self, row):
 		"""Get number of tokens in answer 
@@ -389,63 +393,51 @@ class FeatureConstruction:
 				count +=1
 		return count
 
-	def _answer_ner_density(self, row):
-		"""Tokens in the answer that contains an entity
+	def _ner_features(self, row):
+		"""Name entity recognition features
 		Args:
 		    row(pandas.dataframe): dataframe of current row
 		Return:
 		    row(pandas.dataframe): result a pandas dataframe with new feature
 		"""
-		ann = Annotator()
-		answer = row.Answer 
-		try:
-			ners = ann.getAnnotations(answer)['ner']
-			ner_values = [v for k, v in ners]
-			is_loc = any('LOC' in s for s in ners_values)
-			is_org = any('ORG' in s for s in ners_values)
-			is_per = any('PER' in s for s in ners_values)
-			if is_loc or is_org or is_per:
-				row['ANSWER_CONTAINS_NAME_ENTITY'] = 1
-				return row
-			else:
-				row['ANSWER_CONTAINS_NAME_ENTITY'] = 0
-				return row
-		except:
-			row['ANSWER_CONTAINS_NAME_ENTITY'] = 0
-			return row
-
-	def _question_ner_density(self, row):
-		"""Tokens in the quesiton that contains an entity
-		Args:
-		    row(pandas.dataframe): dataframe of current row
-		Return:
-		    row(pandas.dataframe): result a pandas dataframe with new feature
-		"""
-		ann = Annotator
-		question = row.Question 
-		try:
-			ners = ann.getAnnotations(question)['ner']
-			ner_values = [v for k, v in ners]
-			is_loc = any('LOC' in s for s in ners_values)
-			is_org = any('ORG' in s for s in ners_values)
-			is_per = any('PER' in s for s in ners_values)
-			if is_loc or is_org or is_per:
-				row['QUESTION_CONTAINS_NAME_ENTITY'] = 1
-				return row
-			else:
-				row['QUESTION_CONTAINS_NAME_ENTITY'] = 0
-				return row
-		except:
-			row['QUESTION_CONTAINS_NAME_ENTITY'] = 0
-			return row
-
-
-
-
-
-
-
-
+		answer = row.Answer
+		question = row.Question
+		sentence_len = len(row.Sentence.split())
+		ners_answer = self.st.tag(answer.split())
+		ners_question = self.st.tag(question.split())
+		ner_values_answer = [v for k, v in ners_answer if v in ['PERSON', 'ORGANIZATION', 'LOCATION']]
+		ner_values_question = [v for k, v in ners_question if v in ['PERSON', 'ORGANIZATION', 'LOCATION']]
+		#NER IN ANSWER
+		if 'PERSON' in ner_values_answer:
+			row['NAMED_ENTITY_IN_ANSWER_COUNT_PERS'] = 1
+		else:
+			row['NAMED_ENTITY_IN_ANSWER_COUNT_PERS'] = 0
+		if 'ORGANIZATION' in ner_values_answer:
+			row['NAMED_ENTITY_IN_ANSWER_COUNT_ORG'] = 1
+		else:
+			row['NAMED_ENTITY_IN_ANSWER_COUNT_ORG'] = 0
+		if 'LOCATION' in ner_values_answer:
+			row['NAMED_ENTITY_IN_ANSWER_COUNT_LOC'] = 1
+		else:
+			row['NAMED_ENTITY_IN_ANSWER_COUNT_LOC'] = 0
+		#NER IN QUESTION
+		if 'PERSON' in ner_values_question:
+			row['NAMED_ENTITY_OUT_ANSWER_COUNT_PERS'] = 1
+		else:
+			row['NAMED_ENTITY_OUT_ANSWER_COUNT_PERS'] = 0
+		if 'ORGANIZATION' in ner_values_question:
+			row['NAMED_ENTITY_OUT_ANSWER_COUNT_ORG'] = 1
+		else:
+			row['NAMED_ENTITY_OUT_ANSWER_COUNT_ORG'] = 0
+		if 'LOCATION' in ner_values_question:
+			row['NAMED_ENTITY_OUT_ANSWER_COUNT_LOC'] = 1
+		else:
+			row['NAMED_ENTITY_OUT_ANSWER_COUNT_LOC'] = 0
+		row['NUM_NAMED_ENTITIES_IN_ANSWER'] = len(ner_values_answer)
+		row['NUM_NAMED_ENTITIES_OUT_ANSWER'] = len(ner_values_question)
+		row['ANSWER_NAMED_ENTITY_DENSITY'] = float(len(ner_values_answer))/sentence_len
+		row['QUESTION_NAMED_ENTITY_DENSITY'] = float(len(ner_values_question))/sentence_len
+		return row
 
 	def extract_feature(self, candidates):
 		"""Build feature dataframe
@@ -455,6 +447,7 @@ class FeatureConstruction:
 		    df(pandas.dataframe): dataframe of question, answer, sentence and features
 		"""
 		df = pd.DataFrame(candidates)
+		rows = []
 		for idx, row in df.iterrows():
 			row = self._num_token_in_answer(row)
 			row = self._num_token_in_sentence(row)
@@ -570,9 +563,12 @@ class FeatureConstruction:
 			row['GRAM_IN_ANSWER_COUNT_WP'] = self._pos_gram_count_answer(row, "WP")
 			row['GRAM_IN_ANSWER_COUNT_WP$'] = self._pos_gram_count_answer(row, "WP$")
 			row['GRAM_IN_ANSWER_COUNT_WRB'] = self._pos_gram_count_answer(row, "WRB")
-			row = self._answer_ner_density(row)
-			row = self._question_ner_density(row)
-			print row
+			row = self._ner_features(row)
+			rows.append(row)
+			print "processing %d" % idx
+		df = pd.concat(rows, axis = 1)
+		return df
+
 
 
 
