@@ -4,7 +4,6 @@ from nltk.tag import StanfordNERTagger
 
 class FeatureConstruction:
 	def __init__(self):
-		self.classifier = os.environ.get('CLASSIFIER_PATH')
 		os.environ['STANFORD_MODELS'] = os.environ.get('STANFORD_NERS')
 		self.st = StanfordNERTagger('english.all.3class.distsim.crf.ser.gz') 
 
