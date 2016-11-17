@@ -56,7 +56,7 @@ CLASSIFIER_PATH = "/Users/path-to-project/model/clf.pkl"
     | - ..... (rest stuff)
 ```
 
-- It shuold be noted that `englishPCFG.ser.gz` and `english.all.3class.distsim.crf.ser.gz` originally in a subfolder named `classifiers`
+- It shuold be noted that `englishPCFG.ser.gz` and `english.all.3class.distsim.crf.ser.gz` originally in a subfolder named `models/classifiers`.
 
 ## Run
 
