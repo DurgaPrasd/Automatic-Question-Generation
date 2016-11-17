@@ -7,11 +7,8 @@ Learning to generate Gap-Filling questions from teaching material.
 
 ## Unfinished Yet
 
-- SOLVE BUG MAX() FUNCTION EMPTY SEQUENCE **SLOVED**
-- PRINT ALL EXCEPTIONS **SOLVED**
 - RE-TRAIN SVM AFTER SOLVE BUG. **WORKING**
 - CIRCLECI PROBLEM, NEED TO DOWNLOAD NLTK DATA OTHERWISE WILL ALWAYS FAIL TO DEPLOY
-- ADD STANFORD PARSER + NLTK INSTALL PROCESS IN README
 
 ## Build
 
@@ -28,7 +25,7 @@ Learning to generate Gap-Filling questions from teaching material.
 SENTENCE_RATIO = 0.05 #The threshold of important sentences
 
 #Stanford Jars, your folder of STANFORD PARSER
-STANFORD_JARS="/Users/path-to-stanford-parser/stanford_parser-yyyy-mm-dd/"
+STANFORD_JARS="/Users/path-to-stanford-parser/stanford-parser-yyyy-mm-dd/"
 #Stanford Name Entity Recognition folder, 
 STANFORD_NERS = "/Users/path-to-stanford-ner/stanford-ner-yyyy-mm-dd/"
 #TEMP PATH FOR STORE QUESTION/ANSWER CANDIDATES
