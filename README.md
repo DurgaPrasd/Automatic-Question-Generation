@@ -20,7 +20,22 @@ Learning to generate Gap-Filling questions from teaching material.
 - `git clone https://github.com/bwanglzu/Automatic_Question_Generation.git`
 - `cd Automatic_Question_Generation`
 - `pip install -r requirements.txt`
-- `touch .env` for configuration
+- `touch .env` for configuration (in project root)
+
+### .env
+
+```python
+SENTENCE_RATIO = 0.05 #The threshold of important sentences
+
+#Stanford Jars, your folder of STANFORD PARSER
+STANFORD_JARS="/Users/path-to-stanford-parser/stanford_parser-yyyy-mm-dd/"
+#Stanford Name Entity Recognition folder, 
+STANFORD_NERS = "/Users/path-to-stanford-ner/stanford-ner-yyyy-mm-dd/"
+#TEMP PATH FOR STORE QUESTION/ANSWER CANDIDATES
+CANDIDATE_PATH = "/Users/wbcha/Desktop/project/Mind_The_Gap/candidates/"
+#Support Vector Machine Path (in project folder/model, clf.pkl)
+CLASSIFIER_PATH = "/Users/path-to-project/model/clf.pkl"
+```
 
 ### Build Stanford Parser & NER
 
@@ -38,7 +53,7 @@ Learning to generate Gap-Filling questions from teaching material.
 - Folder structure of Stanford NER:
 
 ```python
-- stanford-ner-2015-12-09
+- stanford-ner-yyyy-mm-dd
     | - stanford-ner-3.6.0.jar
     | - stanford-ner.jar
     | - english.all.3class.distsim.crf.ser.gz
@@ -46,21 +61,6 @@ Learning to generate Gap-Filling questions from teaching material.
 ```
 
 - It shuold be noted that `englishPCFG.ser.gz` and `english.all.3class.distsim.crf.ser.gz` originally in a subfolder named `classifiers`
-
-### .ENV for Conficuration
-
-```python
-SENTENCE_RATIO = 0.05 #The threshold of important sentences
-
-#Stanford Jars, your folder of STANFORD PARSER
-STANFORD_JARS="/Users/path-to-stanford-parser/stanford_parser-yyyy-mm-dd/"
-#Stanford Name Entity Recognition folder, 
-STANFORD_NERS = "/Users/path-to-stanford-ner/stanford-ner-2015-12-09/"
-#TEMP PATH FOR STORE QUESTION/ANSWER CANDIDATES
-CANDIDATE_PATH = "/Users/wbcha/Desktop/project/Mind_The_Gap/candidates/"
-#Support Vector Machine Path (in project folder/model, clf.pkl)
-CLASSIFIER_PATH = "/Users/path-to-project/model/clf.pkl"
-```
 
 ## Run
 
