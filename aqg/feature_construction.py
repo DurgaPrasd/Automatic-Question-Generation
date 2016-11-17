@@ -329,11 +329,10 @@ class FeatureConstruction:
 		"""
 		text = nltk.word_tokenize(question)
 		post = nltk.pos_tag(text)
-		index = [i for i,x in enumerate(post) if x == ('_','NNP')]
-		index = max(index) + 1
+		index = next(idx for (idx, t) in enumerate(post) if t[0]=='_____') + 1
 		return post[index][1]
 
-	def pos1_gram_before_answer(self, row, flag):
+	def _pos1_gram_before_answer(self, row, flag):
 		"""The first POS tag before the answer span is [FLAG]
 		Args:
 		    row(pandas.dataframe): input pandas dataframe
@@ -360,8 +359,7 @@ class FeatureConstruction:
 		"""
 		text = nltk.word_tokenize(question)
 		post = nltk.pos_tag(text)
-		index = [i for i,x in enumerate(post) if x == ('_','NNP')]
-		index = min(index) - 1
+		index = next(idx for (idx, t) in enumerate(post) if t[0]=='_____') - 1
 		return post[index][1]
 
 
@@ -380,7 +378,7 @@ class FeatureConstruction:
 		except:
 			return 0
 
-	def _count_token_with_match(answer, match):
+	def _count_token_with_match(self, answer, match):
 		"""Count answer match FLAG 
 		"""
 		text = nltk.word_tokenize(answer)
@@ -389,7 +387,57 @@ class FeatureConstruction:
 		for k, v in post:
 			if v == match:
 				count +=1
-		return count 
+		return count
+
+	def _answer_ner_density(self, row):
+		"""Tokens in the answer that contains an entity
+		Args:
+		    row(pandas.dataframe): dataframe of current row
+		Return:
+		    row(pandas.dataframe): result a pandas dataframe with new feature
+		"""
+		ann = Annotator()
+		answer = row.Answer 
+		try:
+			ners = ann.getAnnotations(answer)['ner']
+			ner_values = [v for k, v in ners]
+			is_loc = any('LOC' in s for s in ners_values)
+			is_org = any('ORG' in s for s in ners_values)
+			is_per = any('PER' in s for s in ners_values)
+			if is_loc or is_org or is_per:
+				row['ANSWER_CONTAINS_NAME_ENTITY'] = 1
+				return row
+			else:
+				row['ANSWER_CONTAINS_NAME_ENTITY'] = 0
+				return row
+		except:
+			row['ANSWER_CONTAINS_NAME_ENTITY'] = 0
+			return row
+
+	def _question_ner_density(self, row):
+		"""Tokens in the quesiton that contains an entity
+		Args:
+		    row(pandas.dataframe): dataframe of current row
+		Return:
+		    row(pandas.dataframe): result a pandas dataframe with new feature
+		"""
+		ann = Annotator
+		question = row.Question 
+		try:
+			ners = ann.getAnnotations(question)['ner']
+			ner_values = [v for k, v in ners]
+			is_loc = any('LOC' in s for s in ners_values)
+			is_org = any('ORG' in s for s in ners_values)
+			is_per = any('PER' in s for s in ners_values)
+			if is_loc or is_org or is_per:
+				row['QUESTION_CONTAINS_NAME_ENTITY'] = 1
+				return row
+			else:
+				row['QUESTION_CONTAINS_NAME_ENTITY'] = 0
+				return row
+		except:
+			row['QUESTION_CONTAINS_NAME_ENTITY'] = 0
+			return row
 
 
 
@@ -456,7 +504,76 @@ class FeatureConstruction:
 			row['GRAM_AFTER_ANSWER_WDT'] = self._pos1_gram_after_answer(row, "WDT")
 			row['GRAM_AFTER_ANSWER_WP'] = self._pos1_gram_after_answer(row, "WP")
 			row['GRAM_AFTER_ANSWER_WRB'] = self._pos1_gram_after_answer(row, "WRB")
+			row['GRAM_BEFORE_ANSWER_Comma'] = self._pos1_gram_before_answer(row, ",")
+			row['GRAM_BEFORE_ANSWER_LRB'] = self._pos1_gram_before_answer(row, "LRB")
+			row['GRAM_BEFORE_ANSWER_RRB'] = self._pos1_gram_before_answer(row, "RRB")
+			row['GRAM_BEFORE_ANSWER_Colon'] = self._pos1_gram_before_answer(row, ":")
+			row['GRAM_BEFORE_ANSWER_CC'] = self._pos1_gram_after_answer(row, "CC")
+			row['GRAM_BEFORE_ANSWER_CD'] = self._pos1_gram_before_answer(row, "CD")
+			row['GRAM_BEFORE_ANSWER_DT'] = self._pos1_gram_before_answer(row, "DT")
+			row['GRAM_BEFORE_ANSWER_EX'] = self._pos1_gram_before_answer(row, "EX")
+			row['GRAM_BEFORE_ANSWER_IN'] = self._pos1_gram_before_answer(row, "IN")
+			row['GRAM_BEFORE_ANSWER_JJ'] = self._pos1_gram_before_answer(row, "JJ")
+			row['GRAM_BEFORE_ANSWER_MD'] = self._pos1_gram_before_answer(row, "MD")
+			row['GRAM_BEFORE_ANSWER_NN'] = self._pos1_gram_before_answer(row, "NN")
+			row['GRAM_BEFORE_ANSWER_NNP'] = self._pos1_gram_before_answer(row, "NNP")
+			row['GRAM_BEFORE_ANSWER_NNPS'] = self._pos1_gram_before_answer(row, "NNPS")
+			row['GRAM_BEFORE_ANSWER_NNS'] = self._pos1_gram_before_answer(row, "NNS")
+			row['GRAM_BEFORE_ANSWER_POS'] = self._pos1_gram_before_answer(row, "POS")
+			row['GRAM_BEFORE_ANSWER_PRP$'] = self._pos1_gram_before_answer(row, "PRP$")
+			row['GRAM_BEFORE_ANSWER_RB'] = self._pos1_gram_before_answer(row, "RB")
+			row['GRAM_BEFORE_ANSWER_RBS'] = self._pos1_gram_before_answer(row, "RBS")
+			row['GRAM_BEFORE_ANSWER_RP'] = self._pos1_gram_before_answer(row, "RP")
+			row['GRAM_BEFORE_ANSWER_TO'] = self._pos1_gram_before_answer(row, "TO")
+			row['GRAM_BEFORE_ANSWER_VB'] = self._pos1_gram_before_answer(row, "VB")
+			row['GRAM_BEFORE_ANSWER_VBD'] = self._pos1_gram_before_answer(row, "VBD")
+			row['GRAM_BEFORE_ANSWER_VBG'] = self._pos1_gram_before_answer(row, "VBG")
+			row['GRAM_BEFORE_ANSWER_VBN'] = self._pos1_gram_before_answer(row, "VBN")
+			row['GRAM_BEFORE_ANSWER_VBP'] = self._pos1_gram_before_answer(row, "VBP")
+			row['GRAM_BEFORE_ANSWER_VBZ'] = self._pos1_gram_before_answer(row, "VBZ")
+			row['GRAM_BEFORE_ANSWER_WDT'] = self._pos1_gram_before_answer(row, "WDT")
+			row['GRAM_BEFORE_ANSWER_WP'] = self._pos1_gram_before_answer(row, "WP")
+			row['GRAM_BEFORE_ANSWER_WRB'] = self._pos1_gram_before_answer(row, "WRB")
+			row['GRAM_IN_ANSWER_COUNT_Quotation'] = self._pos_gram_count_answer(row, "'")
+			row['GRAM_IN_ANSWER_COUNT_Comma'] = self._pos_gram_count_answer(row, ",")
+			row['GRAM_IN_ANSWER_COUNT_LRB'] = self._pos_gram_count_answer(row, "LRB")
+			row['GRAM_IN_ANSWER_COUNT_RRB'] = self._pos_gram_count_answer(row, "RRB")
+			row['GRAM_IN_ANSWER_COUNT_Colon'] = self._pos_gram_count_answer(row, ":")
+			row['GRAM_IN_ANSWER_COUNT_CC'] = self._pos_gram_count_answer(row, "CC")
+			row['GRAM_IN_ANSWER_COUNT_CD'] = self._pos_gram_count_answer(row, "CD")
+			row['GRAM_IN_ANSWER_COUNT_DT'] = self._pos_gram_count_answer(row, "DT")
+			row['GRAM_IN_ANSWER_COUNT_EX'] = self._pos_gram_count_answer(row, "EX")
+			row['GRAM_IN_ANSWER_COUNT_IN'] = self._pos_gram_count_answer(row, "IN")
+			row['GRAM_IN_ANSWER_COUNT_JJ'] = self._pos_gram_count_answer(row, "JJ")
+			row['GRAM_IN_ANSWER_COUNT_JJR'] = self._pos_gram_count_answer(row, "JJR")
+			row['GRAM_IN_ANSWER_COUNT_JJS'] = self._pos_gram_count_answer(row, "JJS")
+			row['GRAM_IN_ANSWER_COUNT_MD'] = self._pos_gram_count_answer(row, "MD")
+			row['GRAM_IN_ANSWER_COUNT_NN'] = self._pos_gram_count_answer(row, "NN")
+			row['GRAM_IN_ANSWER_COUNT_NNP'] = self._pos_gram_count_answer(row, "NNP")
+			row['GRAM_IN_ANSWER_COUNT_NNPS'] = self._pos_gram_count_answer(row, "NNPS")
+			row['GRAM_IN_ANSWER_COUNT_NNS'] = self._pos_gram_count_answer(row, "NNS")
+			row['GRAM_IN_ANSWER_COUNT_POS'] = self._pos_gram_count_answer(row, "POS")
+			row['GRAM_IN_ANSWER_COUNT_PRP'] = self._pos_gram_count_answer(row, "PRP")
+			row['GRAM_IN_ANSWER_COUNT_PRP$'] = self._pos_gram_count_answer(row, "PRP$")
+			row['GRAM_IN_ANSWER_COUNT_RB'] = self._pos_gram_count_answer(row, "RB")
+			row['GRAM_IN_ANSWER_COUNT_RBR'] = self._pos_gram_count_answer(row, "RBR")
+			row['GRAM_IN_ANSWER_COUNT_RBS'] = self._pos_gram_count_answer(row, "RBS")
+			row['GRAM_IN_ANSWER_COUNT_RP'] = self._pos_gram_count_answer(row, "RP")
+			row['GRAM_IN_ANSWER_COUNT_TO'] = self._pos_gram_count_answer(row, "TO")
+			row['GRAM_IN_ANSWER_COUNT_VB'] = self._pos_gram_count_answer(row, "VB")
+			row['GRAM_IN_ANSWER_COUNT_VBD'] = self._pos_gram_count_answer(row, "VBD")
+			row['GRAM_IN_ANSWER_COUNT_VBG'] = self._pos_gram_count_answer(row, "VBG")
+			row['GRAM_IN_ANSWER_COUNT_VBN'] = self._pos_gram_count_answer(row, "VBN")
+			row['GRAM_IN_ANSWER_COUNT_VBP'] = self._pos_gram_count_answer(row, "VBP")
+			row['GRAM_IN_ANSWER_COUNT_VBZ'] = self._pos_gram_count_answer(row, "VBZ")
+			row['GRAM_IN_ANSWER_COUNT_WDT'] = self._pos_gram_count_answer(row, "WDT")
+			row['GRAM_IN_ANSWER_COUNT_WP'] = self._pos_gram_count_answer(row, "WP")
+			row['GRAM_IN_ANSWER_COUNT_WP$'] = self._pos_gram_count_answer(row, "WP$")
+			row['GRAM_IN_ANSWER_COUNT_WRB'] = self._pos_gram_count_answer(row, "WRB")
+			row = self._answer_ner_density(row)
+			row = self._question_ner_density(row)
 			print row
+
 
 
 
