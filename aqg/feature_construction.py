@@ -387,7 +387,57 @@ class FeatureConstruction:
 		for k, v in post:
 			if v == match:
 				count +=1
-		return count 
+		return count
+
+	def _answer_ner_density(self, row):
+		"""Tokens in the answer that contains an entity
+		Args:
+		    row(pandas.dataframe): dataframe of current row
+		Return:
+		    row(pandas.dataframe): result a pandas dataframe with new feature
+		"""
+		ann = Annotator()
+		answer = row.Answer 
+		try:
+			ners = ann.getAnnotations(answer)['ner']
+			ner_values = [v for k, v in ners]
+			is_loc = any('LOC' in s for s in ners_values)
+			is_org = any('ORG' in s for s in ners_values)
+			is_per = any('PER' in s for s in ners_values)
+			if is_loc or is_org or is_per:
+				row['ANSWER_CONTAINS_NAME_ENTITY'] = 1
+				return row
+			else:
+				row['ANSWER_CONTAINS_NAME_ENTITY'] = 0
+				return row
+		except:
+			row['ANSWER_CONTAINS_NAME_ENTITY'] = 0
+			return row
+
+	def _question_ner_density(self, row):
+		"""Tokens in the quesiton that contains an entity
+		Args:
+		    row(pandas.dataframe): dataframe of current row
+		Return:
+		    row(pandas.dataframe): result a pandas dataframe with new feature
+		"""
+		ann = Annotator
+		question = row.Question 
+		try:
+			ners = ann.getAnnotations(question)['ner']
+			ner_values = [v for k, v in ners]
+			is_loc = any('LOC' in s for s in ners_values)
+			is_org = any('ORG' in s for s in ners_values)
+			is_per = any('PER' in s for s in ners_values)
+			if is_loc or is_org or is_per:
+				row['QUESTION_CONTAINS_NAME_ENTITY'] = 1
+				return row
+			else:
+				row['QUESTION_CONTAINS_NAME_ENTITY'] = 0
+				return row
+		except:
+			row['QUESTION_CONTAINS_NAME_ENTITY'] = 0
+			return row
 
 
 
@@ -520,6 +570,8 @@ class FeatureConstruction:
 			row['GRAM_IN_ANSWER_COUNT_WP'] = self._pos_gram_count_answer(row, "WP")
 			row['GRAM_IN_ANSWER_COUNT_WP$'] = self._pos_gram_count_answer(row, "WP$")
 			row['GRAM_IN_ANSWER_COUNT_WRB'] = self._pos_gram_count_answer(row, "WRB")
+			row = self._answer_ner_density(row)
+			row = self._question_ner_density(row)
 			print row
 
 
