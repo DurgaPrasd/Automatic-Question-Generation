@@ -23,7 +23,6 @@ Learning to generate Gap-Filling questions from teaching material.
 
 ```python
 SENTENCE_RATIO = 0.05 #The threshold of important sentences
-
 #Stanford Jars, your folder of STANFORD PARSER
 STANFORD_JARS="/Users/path-to-stanford-parser/stanford-parser-yyyy-mm-dd/"
 #Stanford Name Entity Recognition folder, 
@@ -57,7 +56,7 @@ CLASSIFIER_PATH = "/Users/path-to-project/model/clf.pkl"
     | - ..... (rest stuff)
 ```
 
-- It shuold be noted that `englishPCFG.ser.gz` and `english.all.3class.distsim.crf.ser.gz` originally in a subfolder named `classifiers`
+- It shuold be noted that `englishPCFG.ser.gz` and `english.all.3class.distsim.crf.ser.gz` originally in a subfolder named `models/classifiers`.
 
 ## Run
 
