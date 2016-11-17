@@ -40,4 +40,5 @@ def classify(df):
 
 
 if __name__ == '__main__':
-	print pipeline("/Users/wbcha/Desktop/project/Automatic_Question_Generation/tests/obama.txt")
+	doc = sys.argv[1:]
+	print pipeline(doc)
