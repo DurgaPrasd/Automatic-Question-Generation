@@ -10,18 +10,25 @@ Learning to generate Gap-Filling questions from teaching material.
 - SOLVE BUG MAX() FUNCTION EMPTY SEQUENCE **SLOVED**
 - PRINT ALL EXCEPTIONS **SOLVED**
 - RE-TRAIN SVM AFTER SOLVE BUG. **WORKING**
-- CIRCLECI PROBLEM, NEED TO DOWNLOAD NLTK DATA OTHERWISE WILL ALWAYS FAILER TO DEPLOY
+- CIRCLECI PROBLEM, NEED TO DOWNLOAD NLTK DATA OTHERWISE WILL ALWAYS FAIL TO DEPLOY
 - ADD STANFORD PARSER + NLTK INSTALL PROCESS IN README
 
 ## Build
 
+### Build Project
+
 - `git clone https://github.com/bwanglzu/Automatic_Question_Generation.git`
 - `pip install -r requirements.txt`
-- Modify configuration files in ``
+- Modify configuration files in `.env`
+
+### Build Stanford Parser & NER
+
+- Java 1.8 required
 
 ## Run
 
 - `cd aqg`
+- `python app.py document.txt`
 
 ## Test
 
