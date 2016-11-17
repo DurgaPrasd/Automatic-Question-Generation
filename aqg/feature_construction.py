@@ -401,11 +401,14 @@ class FeatureConstruction:
 		"""
 		answer = row.Answer
 		question = row.Question
-		sentence_len = len(row.Sentence.split())
-		ners_answer = self.st.tag(answer.split())
-		ners_question = self.st.tag(question.split())
-		ner_values_answer = [v for k, v in ners_answer if v in ['PERSON', 'ORGANIZATION', 'LOCATION']]
-		ner_values_question = [v for k, v in ners_question if v in ['PERSON', 'ORGANIZATION', 'LOCATION']]
+		try:
+		    sentence_len = len(row.Sentence.split())
+		    ners_answer = self.st.tag(answer.split())
+		    ners_question = self.st.tag(question.split())
+		    ner_values_answer = [v for k, v in ners_answer if v in ['PERSON', 'ORGANIZATION', 'LOCATION']]
+		    ner_values_question = [v for k, v in ners_question if v in ['PERSON', 'ORGANIZATION', 'LOCATION']]
+		except:
+			return None
 		#NER IN ANSWER
 		if 'PERSON' in ner_values_answer:
 			row['NAMED_ENTITY_IN_ANSWER_COUNT_PERS'] = 1
@@ -563,8 +566,11 @@ class FeatureConstruction:
 			row['GRAM_IN_ANSWER_COUNT_WP$'] = self._pos_gram_count_answer(row, "WP$")
 			row['GRAM_IN_ANSWER_COUNT_WRB'] = self._pos_gram_count_answer(row, "WRB")
 			row = self._ner_features(row)
-			rows.append(row)
-			print "processing %d" % idx
+			if row:
+			    rows.append(row)
+			    print "processing %d" % idx
+			else:
+				continue
 		df = pd.concat(rows, axis = 1)
 		return df
 
