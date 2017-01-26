@@ -441,6 +441,91 @@ class FeatureConstruction:
 		row['QUESTION_NAMED_ENTITY_DENSITY'] = float(len(ner_values_question))/sentence_len
 		return row
 
+	def _srl_features(self, row):
+		"""Semantic role labeling features 
+		Args:
+		Return:
+		"""
+		ann = Annotator()
+		answer = row.Answer
+		sentence = row.Sentence
+		try:
+			srls = ann.getAnnotations(answer)
+		except:
+			return None 
+		match = []
+		for srl in srls:
+			dct = {key: value for key, value in srl.iteritems() if value==answer}
+			if bool(dct):
+				match.append(dct.keys())
+		match = [item for sublist in match for item in sublist]
+		if 'A0' in match:
+			row['ANSWER_CONTAINS_SRL_A0'] = 1
+		else:
+			row['ANSWER_CONTAINS_SRL_A0'] = 0
+		if 'A1' in match:
+			row['ANSWER_CONTAINS_SRL_A1'] = 1
+		else:
+			row['ANSWER_CONTAINS_SRL_A1'] = 0
+		if 'A2' in match:
+			row['ANSWER_CONTAINS_SRL_A2'] = 1
+		else:
+			row['ANSWER_CONTAINS_SRL_A2'] = 0
+		if 'A3' in match:
+			row['ANSWER_CONTAINS_SRL_A3'] = 1
+		else:
+			row['ANSWER_CONTAINS_SRL_A3'] = 0
+		if 'A4' in match:
+			row['ANSWER_CONTAINS_SRL_A4'] = 1
+		else:
+			row['ANSWER_CONTAINS_SRL_A4'] = 0
+		if 'AM-ADV' in match:
+			row['ANSWER_CONTAINS_SRL_AM-ADV'] = 1
+		else:
+			row['ANSWER_CONTAINS_SRL_AM-ADV'] = 0
+		if 'AM-CAU' in match:
+			row['ANSWER_CONTAINS_SRL_AM-CAU'] = 1
+		else:
+			row['ANSWER_CONTAINS_SRL_AM-CAU'] = 0
+		if 'AM-DIR' in match:
+			row['ANSWER_CONTAINS_SRL_AM-DIR'] = 1
+		else:
+			row['ANSWER_CONTAINS_SRL_AM-DIR'] = 0
+		if 'AM-DIS' in match:
+			row['ANSWER_CONTAINS_SRL_AM-DIS'] = 1
+		else:
+			row['ANSWER_CONTAINS_SRL_AM-DIS'] = 0
+		if 'AM-LOC' in match:
+			row['ANSWER_CONTAINS_SRL_AM-LOC'] = 1
+		else:
+			row['ANSWER_CONTAINS_SRL_AM-LOC'] = 0
+		if 'AM-MNR' in match:
+			row['ANSWER_CONTAINS_SRL_AM-MNR'] = 1
+		else:
+			row['ANSWER_CONTAINS_SRL_AM-MNR'] = 0
+		if 'AM-PNC' in match:
+			row['ANSWER_CONTAINS_SRL_AM-PNC'] = 1
+		else:
+			row['ANSWER_CONTAINS_SRL_AM-PNC'] = 0
+		if 'AM-REC' in match:
+			row['ANSWER_CONTAINS_SRL_AM-REC'] = 1
+		else:
+			row['ANSWER_CONTAINS_SRL_AM-REC'] = 0
+		if 'AM-TMP' in match:
+			row['ANSWER_CONTAINS_SRL_AM-TMP'] = 1
+		else:
+			row['ANSWER_CONTAINS_SRL_AM-TMP'] = 0
+		if 'C-A0' in match:
+			row['ANSWER_CONTAINS_SRL_C-A0'] = 1
+		else:
+			row['ANSWER_CONTAINS_SRL_C-A0'] = 0
+		if 'C-A1' in match:
+			row['ANSWER_CONTAINS_SRL_C-A1'] = 1
+		else:
+			row['ANSWER_CONTAINS_SRL_C-A1'] = 0
+		return row
+
+
 	def extract_feature(self, candidates):
 		"""Build feature dataframe
 		Args:
@@ -571,7 +656,7 @@ class FeatureConstruction:
 			    print "processing %d" % idx
 			else:
 				continue
-		df = pd.concat(rows, axis = 1)
+		df = pd.concat(rows, axis = 0)
 		return df
 
 

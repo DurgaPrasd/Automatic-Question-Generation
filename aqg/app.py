@@ -19,6 +19,8 @@ def pipeline(document):
 	fc = FeatureConstruction()
 	#build candidate questions, extract features
 	sentences = ss.prepare_sentences(document)
+	print sentences
+	os.environ['STANFORD_MODELS'] = os.environ.get('STANFORD_NERS')
 	candidates = gs.get_candidates(sentences)
 	candidates_with_features = fc.extract_feature(candidates)
 	question_answers = classify(candidates_with_features)
@@ -40,5 +42,5 @@ def classify(df):
 
 
 if __name__ == '__main__':
-	doc = sys.argv[1:]
+	doc = sys.argv[1]
 	print pipeline(doc)
