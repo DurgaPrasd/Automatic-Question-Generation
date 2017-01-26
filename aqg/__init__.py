@@ -9,7 +9,9 @@ from collections import defaultdict
 from collections import OrderedDict
 
 import nltk
+nltk.download("punkt")
 nltk.download("stopwords")
+nltk.download("averaged_perceptron_tagger")
 
 import numpy as np
 import pandas as pd
