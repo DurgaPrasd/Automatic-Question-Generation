@@ -9,6 +9,8 @@ from collections import defaultdict
 from collections import OrderedDict
 
 import nltk
+nltk.download("stopwords")
+
 import numpy as np
 import pandas as pd
 from sklearn import svm
