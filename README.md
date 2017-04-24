@@ -62,7 +62,7 @@ STANFORD_NER_CLASSPATH=/path-to-your-stanford-models/stanford-models/stanford-ne
 
 - Sentence Selection: select topically important sentences from text document.
 - Gap Selection: Exmploy standford parser extract NP (noun phrase) and ADJP from important sentences as candidate gaps
-- Question Classification: Classify question quality based on SVM classifier
+- Question Classification: Classify question quality based on pre-trained SVM classifier
 
 ## Performance:
 
