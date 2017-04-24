@@ -4,6 +4,7 @@ from os.path import isfile, join
 
 class File_Reader:
 
+
     def __init__(self):
         pass
 

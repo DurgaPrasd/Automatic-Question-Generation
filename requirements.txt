@@ -5,3 +5,7 @@ scipy >= 0.9.0
 scikit-learn >= 0.17.1
 python-dotenv == 0.6.0
 coverage == 4.2
+<<<<<<< HEAD
+=======
+-e git+https://github.com/biplab-iitb/practNLPTools.git#egg=practNLPTools
+>>>>>>> 77074128c3790841978cf0778739e0b58f663e31
