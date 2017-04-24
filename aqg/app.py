@@ -13,6 +13,7 @@ nltk.download("punkt")
 nltk.download("stopwords")
 nltk.download("averaged_perceptron_tagger")
 
+import argparse
 import numpy as np
 import pandas as pd
 from sklearn import svm
@@ -21,19 +22,12 @@ from sklearn.externals import joblib
 import utils.linguistic as ling
 from utils.file_reader import File_Reader
 from utils.file_writer import File_Writer
-
-from dotenv import load_dotenv, find_dotenv
-load_dotenv(find_dotenv())
-
-
-import argparse
-
-from sklearn import svm
-from sklearn.externals import joblib
-
 from utils.gap_selection import GapSelection
 from utils.sentence_selection import SentenceSelection
 from utils.feature_construction import FeatureConstruction
+
+from dotenv import load_dotenv, find_dotenv
+load_dotenv(find_dotenv())
 
 
 def pipeline(document):

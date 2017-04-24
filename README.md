@@ -1,14 +1,8 @@
 # Automatic Gap-Filling Question Generator
 
-[![CircleCI](https://circleci.com/gh/bwanglzu/Automatic_Question_Generation/tree/master.svg?style=shield&circle-token=:circle-token)](https://circleci.com/gh/bwanglzu/QA-Crawler/tree/master)
 [![Requirements Status](https://requires.io/github/bwanglzu/QA-Crawler/requirements.svg?branch=master)](https://requires.io/github/bwanglzu/QA-Crawler/requirements/?branch=master)
 
 Learning to generate Gap-Filling questions from teaching material.
-
-## Unfinished Yet
-
-- RE-TRAIN SVM AFTER SOLVE BUG. **WORKING**
-- CIRCLECI PROBLEM, NEED TO DOWNLOAD NLTK DATA OTHERWISE WILL ALWAYS FAIL TO DEPLOY
 
 ## Build
 
@@ -17,55 +11,52 @@ Learning to generate Gap-Filling questions from teaching material.
 - `git clone https://github.com/bwanglzu/Automatic_Question_Generation.git`
 - `cd Automatic_Question_Generation`
 - `pip install -r requirements.txt`
-- `touch .env` for configuration (in project root)
-
-### .env
-
-```python
-SENTENCE_RATIO = 0.05 #The threshold of important sentences
-#Stanford Jars, your folder of STANFORD PARSER
-STANFORD_JARS="/Users/path-to-stanford-parser/stanford-parser-yyyy-mm-dd/"
-#Stanford Name Entity Recognition folder, 
-STANFORD_NERS = "/Users/path-to-stanford-ner/stanford-ner-yyyy-mm-dd/"
-#TEMP PATH FOR STORE QUESTION/ANSWER CANDIDATES
-CANDIDATE_PATH = "/Users/wbcha/Desktop/project/Mind_The_Gap/candidates/"
-#Support Vector Machine Path (in project folder/model, clf.pkl)
-CLASSIFIER_PATH = "/Users/path-to-project/model/clf.pkl"
-```
 
 ### Build Stanford Parser & NER
 
-- Check this page `https://github.com/nltk/nltk/wiki/Installing-Third-Party-Software`
-- Folder structure of Stanford Parser should looks like:
+- Create a folder to host all the stanford models, e.g. `mkdir /your-path-to-stanford-models/stanford-models`.
++ Download Stanford Parser at [here](https://nlp.stanford.edu/software/lex-parser.shtml), unzip, and:
+  - Move `stanford-parser.jar` to stanford models folder, e.g. `/your-path-to-stanford-models/stanford-models/stanford-parser.jar`
+  - Move `stanford-parser-x-x-x-models.jar` to stanford models folder.
+  - Unzip `stanford-parser-x-x-x-models.jar`, move `/edu/stanford/nlp/models/lexparser/englishPCFG.ser.gz` to `stanford-models/`
++ Download Stanford NER at [here](https://nlp.stanford.edu/software/CRF-NER.shtml), unzip, and:
+  - Move `stanford-ner.jar` to stanford models folder.
+  - Move `stanford-ner-x-x-x.jar` to stanford models folder (e.g. 3.7.0).
+  - Move `/classifiers/english.all.3class.distsim.crf.ser.gz` to stanford models folder.
 
-```python
-- stanford-parser-yyyy-mm-dd
-    | - stanford-parser-3.5.2-models.jar
+The stanford models folder should looks like this:
+
+```
+- stanford-models/
     | - stanford-parser.jar
+    | - stanford-parser-x-x-x-models.jar
     | - englishPCFG.ser.gz
-    | - ..... (rest stuff)
+    | - stanford-ner.jar
+    | - stanford-ner-x-x-x.jar
+    | - english.all.3class.distsim.crf.ser.gz
 ```
 
-- Folder structure of Stanford NER:
+### Environment Variables
+
+Create environment variable file with: `touch .env` for configuration (in project root).
 
 ```python
-- stanford-ner-yyyy-mm-dd
-    | - stanford-ner-3.6.0.jar
-    | - stanford-ner.jar
-    | - english.all.3class.distsim.crf.ser.gz
-    | - ..... (rest stuff)
-```
+SENTENCE_RATIO = 0.05 #The threshold of important sentences
 
-- It shuold be noted that `englishPCFG.ser.gz` and `english.all.3class.distsim.crf.ser.gz` originally in a subfolder named `models/classifiers`.
+STANFORD_JARS=/path-to-your-stanford-models/stanford-models/
+STANFORD_PARSER_CLASSPATH=/path-to-your-stanford-models/stanford-models/stanford-parser-x.x.x-models.jar
+
+STANFORD_NER_CLASSPATH=/path-to-your-stanford-models/stanford-models/stanford-ner.jar
+```
 
 ## Run
 
 - `cd aqg`
-- `python app.py document.txt`
+- `python app.py -f name-of-the-document.txt`
 
 ## Test
 
-- `nosetests`
+- `nosetests --with-coverage`
 
 ## Strategy
 
