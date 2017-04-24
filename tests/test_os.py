@@ -15,12 +15,11 @@ class TestOS(unittest.TestCase):
         self.assertIsInstance(fr.read_file(test_path+'/obama.txt'), str)
 
     def test_writer(self):
-    	candidate_path = os.environ.get('CANDIDATE_PATH')
     	fw = File_Writer()
-    	fw.write_candidate_questions("test", 'test.txt')
-    	with open(candidate_path+'test.txt', 'r') as f:
+    	fw.write_candidate_questions("test", os.path.dirname(__file__) + 'test.txt')
+    	with open('test.txt', 'r') as f:
     		self.assertEqual(f.readline().replace('"',''), "test")
-
+        os.remove(os.path.dirname(__file__) + 'test.txt')
 
 
 if __name__ == '__main__':

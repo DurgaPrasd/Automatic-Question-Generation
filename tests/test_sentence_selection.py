@@ -4,7 +4,7 @@ from collections import defaultdict
 
 import sys
 sys.path.append('..')
-from aqg.sentence_selection import SentenceSelection
+from aqg.utils.sentence_selection import SentenceSelection
 
 class TestSentenceSelection(unittest.TestCase):
 	def test_load_clean_sentence(self):
