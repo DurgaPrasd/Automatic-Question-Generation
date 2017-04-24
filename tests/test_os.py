@@ -17,7 +17,7 @@ class TestOS(unittest.TestCase):
     def test_writer(self):
     	fw = File_Writer()
     	fw.write_candidate_questions("test", os.path.dirname(__file__) + 'test.txt')
-    	with open('test.txt', 'r') as f:
+    	with open(os.path.dirname(__file__) + 'test.txt', 'r') as f:
     		self.assertEqual(f.readline().replace('"',''), "test")
         os.remove(os.path.dirname(__file__) + 'test.txt')
 
