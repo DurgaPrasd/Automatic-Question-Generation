@@ -42,7 +42,6 @@ def pipeline(document):
     gs = GapSelection()
     # build candidate questions, extract features
     sentences = ss.prepare_sentences(document)
-    os.environ['STANFORD_MODELS'] = os.environ.get('STANFORD_NERS')
     candidates = gs.get_candidates(sentences)
     fc = FeatureConstruction()
     candidates_with_features = fc.extract_feature(candidates)
@@ -57,7 +56,7 @@ def _classify(df):
     - Returns:
         question_answers(pandas.dataframe): Question, Answer, Prediction (label)
     """
-    clf = joblib.load(os.environ.get('CLASSIFIER_PATH'))
+    clf = joblib.load(os.path.dirname(__file__) + "/models/clf.pkl")
     question_answers = df[['Question', 'Answer']]
     X = df.drop(['Answer', 'Question', 'Sentence'], axis=1).as_matrix()
     y = clf.predict(X)

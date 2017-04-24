@@ -4,8 +4,8 @@ from collections import defaultdict
 
 import sys
 sys.path.append('..')
-from aqg.gap_selection import GapSelection
-from aqg.sentence_selection import SentenceSelection
+from aqg.utils.gap_selection import GapSelection
+from aqg.utils.sentence_selection import SentenceSelection
 
 class TestGapSelection(unittest.TestCase):
     def test_parser(self):
