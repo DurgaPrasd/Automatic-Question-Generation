@@ -10,9 +10,9 @@ class FeatureConstruction:
 
 	def _num_token_in_answer(self, row):
 		"""Get number of tokens in answer 
-		Args:
+		- Args:
 		    row(pandas.datafrane): current row vector
-		Return:
+		- Returns:
 		    row(pandas.datafrane): row vector with new feature 
 		"""
 		answer = row.Answer
@@ -25,9 +25,9 @@ class FeatureConstruction:
 
 	def _num_token_in_sentence(self, row):
 		"""Get number of tokens in question
-		Args:
+		- Args:
 		    row(pandas.dataframe): current row vector
-		Return:
+		- Returns:
 		    row(pandas.dataframe): row vector with new feature 
 		"""
 		question = row.Question
@@ -40,9 +40,9 @@ class FeatureConstruction:
 
 	def _num_row_tokens_matching_in_out(self, row):
 		"""Number of tokens in the answer that match tokens outside of the answer
-		Args:
+		- Args:
 		    row(pandas.dataframe): input pandas dataframe
-		Return:
+		- Returns:
 		    row(pandas.dataframe): result a pandas dataframe with new feature
 		"""
 		answer = row.Answer 
@@ -57,9 +57,9 @@ class FeatureConstruction:
 
 	def _percentage_token_in_answer(self, row):
 		"""Percent of the sentence tokens that are in the answer
-		Args:
+		- Args:
 		    row(pandas.dataframe): input pandas dataframe
-		Return:
+		- Returns:
 		    row(pandas.dataframe): result a pandas dataframe with new feature
 		"""
 		answer_len = row.Num_Tokens_In_Answer
@@ -73,9 +73,9 @@ class FeatureConstruction:
 
 	def _percentage_token_in_out_answer(self, row):
 		"""Percent of the sentence tokens that are in the answer (exclude answer length)
-		Args:
+		- Args:
 		    row(pandas.datafrane): input row vector 
-		Return:
+		- Returns:
 		    row(pandas.dataframe): output row vector with new feature 
 		"""
 		answer_len = row.Num_Tokens_In_Answer
@@ -89,9 +89,9 @@ class FeatureConstruction:
 
 	def _answer_capitalized_word_density(self, row):
 		"""Percentage of tokens in the answer that are all caps
-		Args:
+		- Args:
 		    row(pandas.dataframe): input row vector
-		Return:
+		- Returns:
 		    row(pandas.dataframe): ouput row vector with new features
 		"""
 		answer = row.Answer
@@ -108,9 +108,9 @@ class FeatureConstruction:
 
 	def _answer_pronun_density(self, row):
 		"""Percentage of tokens in the answer that are pronouns
-		Args:
+		- Args:
 		    row(pandas.dataframe): input row vector
-		Return:
+		- Returns:
 		    row(pandas.dataframe): result a row dataframe with new feature
 		"""
 		answer = row.Answer
@@ -123,9 +123,9 @@ class FeatureConstruction:
 
 	def _identify_pronoun(self, answer):
 		"""Calculate percentage of pronouns within answer
-		Args:
+		- Args:
 		    answer(str): answer text
-		Return:
+		- Returns:
 		    percentage(float): ratio of pronouns in answer
 		"""
 		text = nltk.word_tokenize(answer)
@@ -146,9 +146,9 @@ class FeatureConstruction:
 
 	def _answer_stop_word_density(self, row):
 		"""Percentage of tokens in the answer are stopwords
-		Args:
+		- Args:
 		    row(pandas.dataframe): input row vector
-		Return:
+		- Returns:
 		    row(pandas.dataframe): ouput vector with new feature 
 		"""
 		stop = stopwords.words('english')
@@ -166,9 +166,9 @@ class FeatureConstruction:
 
 	def _answer_end_with_quantifier(self, row):
 		"""Answer ends with a quantifier word (many, few, etc, 1 true, 0 false
-		Args:
+		- Args:
 		    row(pandas.dataframe): input row vector 
-		Return:
+		- Returns:
 		    row(pandas.dataframe): output vector with new feature
 		"""
 		answer = row.Answer
@@ -187,9 +187,9 @@ class FeatureConstruction:
 
 	def _answer_start_with_quantifier(self, row):
 		"""Answer start with a quantifier word (many, few etc) 1 true, 0 false
-		Args:
+		- Args:
 		    row(pandas.dataframe): input row vector 
-		Return:
+		- Returns:
 		    row(pandas.dataframe): output vector with new feature
 		"""
 		answer = row.Answer
@@ -208,9 +208,9 @@ class FeatureConstruction:
 
 	def _answer_quantifier_density(self, row):
 		"""Percentage of tokens in the answer that are quantifier words
-		Args:
+		- Args:
 		    row(pandas.dataframe): input pandas dataframe
-		Return:
+		- Returns:
 		    row(pandas.dataframe): result a pandas dataframe with new feature
 		"""
 		answer = row.Answer 
@@ -227,9 +227,9 @@ class FeatureConstruction:
 
 	def _percentage_capitalized_word_in_answer(self, row):
 		"""Percentage of capitalized words in the sentence that are in the answer
-		Args:
+		- Args:
 		    row(pandas.dataframe): input pandas dataframe
-		Return:
+		- Returns:
 		    row(pandas.dataframe): result a pandas dataframe with new feature
 		"""
 		answer = row.Answer
@@ -247,9 +247,9 @@ class FeatureConstruction:
 
 	def _percentage_pronoun_in_answer(self, row):
 		"""Percentage of pronouns in the sentence that are in the answer
-		Args:
+		- Args:
 		    row(pandas.dataframe): input pandas dataframe
-		Return:
+		- Returns:
 		    row(pandas.dataframe): result a pandas dataframe with new feature
 		"""
 		answer = row.Answer
@@ -266,9 +266,9 @@ class FeatureConstruction:
 
 	def _identify_pronoun2(self, sentence):
 		"""Calculate percentage of pronouns in the sentence that are in the answer
-		Args:
+		- Args:
 		    sentence(str): question sentence 
-		Return:
+		- Returns:
 		    pronoun_in_sentence(list): pronouns in sentence 
 		    sentence_len(int): length of current sentence 
 		"""
@@ -284,9 +284,9 @@ class FeatureConstruction:
 
 	def _sentence_start_with_discourse(self, row):
 		"""Sentence starts with a discourse connective word, 1 true 0 false
-		Args:
+		- Args:
 		    row(pandas.dataframe): input pandas dataframe
-		Return:
+		- Returns:
 		    row(pandas.dataframe): result a pandas dataframe with new feature
 		"""
 		sentence = row.Sentence 
@@ -307,10 +307,10 @@ class FeatureConstruction:
 
 	def _pos1_gram_after_answer(self, row, flag):
 		"""The first POS tag following the answer span is [FLAG]
-		Args:
+		- Args:
 		    row(pandas.dataframe): input pandas dataframe
 		    flag(string): symbol to match first tagger
-		Return:
+		- Returns:
 		    binary(int): 1 match, 0 not match
 		"""
 		question = row.Question 
@@ -325,9 +325,9 @@ class FeatureConstruction:
 
 	def _first_tagger_after_answer_span(self, question):
 		"""Get the first tagger after answer span
-		Args:
+		- Args:
 		    question(string): string of current question 
-		Return:
+		- Returns:
 		    tagger(string): tagger of first term after span
 		"""
 		text = nltk.word_tokenize(question)
@@ -337,10 +337,10 @@ class FeatureConstruction:
 
 	def _pos1_gram_before_answer(self, row, flag):
 		"""The first POS tag before the answer span is [FLAG]
-		Args:
+		- Args:
 		    row(pandas.dataframe): input pandas dataframe
 		    flag(string): symbol to match first tagger
-		Return:
+		- Returns:
 		    binary(int): 1 match, 0 not match
 		"""
 		question = row.Question
@@ -355,9 +355,9 @@ class FeatureConstruction:
 
 	def _first_tagger_before_answer_span(self, question):
 		"""Get the first tagger before answer span
-		Args:
+		- Args:
 		    question(string): string of current question 
-		Return:
+		- Returns:
 		    tagger(string): tagger of first term before span
 		"""
 		text = nltk.word_tokenize(question)
@@ -368,10 +368,10 @@ class FeatureConstruction:
 
 	def _pos_gram_count_answer(self, row, flag):
 		"""Count pos tagger within answer that match [FLAG]
-		Args:
+		- Args:
 		    row(pandas.dataframe): dataframe of current row
 		    flag(string): [FLAG] to match answer
-		Return:
+		- Returns:
 		    count(int): number of match
 		"""
 		answer = row.Answer 
@@ -394,9 +394,9 @@ class FeatureConstruction:
 
 	def _ner_features(self, row):
 		"""Name entity recognition features
-		Args:
+		- Args:
 		    row(pandas.dataframe): dataframe of current row
-		Return:
+		- Returns:
 		    row(pandas.dataframe): result a pandas dataframe with new feature
 		"""
 		answer = row.Answer
@@ -443,8 +443,8 @@ class FeatureConstruction:
 
 	def _srl_features(self, row):
 		"""Semantic role labeling features 
-		Args:
-		Return:
+		- Args:
+		- Returns:
 		"""
 		ann = Annotator()
 		answer = row.Answer
@@ -528,9 +528,9 @@ class FeatureConstruction:
 
 	def extract_feature(self, candidates):
 		"""Build feature dataframe
-		Args:
+		- Args:
 		    candidates(list): candidate question answer pairs
-		Return:
+		- Returns:
 		    df(pandas.dataframe): dataframe of question, answer, sentence and features
 		"""
 		df = pd.DataFrame(candidates)

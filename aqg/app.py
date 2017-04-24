@@ -8,9 +8,9 @@ from feature_construction import FeatureConstruction
 
 def pipeline(document):
 	"""Pipeline of Automatic Question Generation 
-	Args:
+	- Args:
 	    document(str): path of input document
-	Return:
+	- Returns:
 	    question_answers(pandas.dataframe): Q/A/Prediction
 	"""
 	#init classes
@@ -28,9 +28,9 @@ def pipeline(document):
 
 def classify(df):
 	"""Classification
-	Args:
+	- Args:
 	    df(pandas.dataframe): candidate qa pairs with extracted features 
-	Return:
+	- Returns:
 	    question_answers(pandas.dataframe): Question, Answer, Prediction (label)
 	"""
 	clf = joblib.load(os.environ.get('CLASSIFIER_PATH'))
