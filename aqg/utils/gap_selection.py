@@ -81,11 +81,7 @@ class GapSelection:
         """
         candidates = []
         for sentence_id, sentence in sentences.items():
-            try:
-                tree = self._parse(sentence)
-            except Exception, e:
-                print str(e)
-                continue
+            tree = self._parse(sentence)
             current_sentence_candidates = self._extract_gaps(
                 sentence, tree)  # build candidate questions
             if current_sentence_candidates == False:
