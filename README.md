@@ -1,6 +1,6 @@
 # Automatic Gap-Filling Question Generator
 
-[![Requirements Status](https://requires.io/github/bwanglzu/QA-Crawler/requirements.svg?branch=master)](https://requires.io/github/bwanglzu/QA-Crawler/requirements/?branch=master)
+[![Requirements Status](https://requires.io/github/bwanglzu/Automatic_Question_Generation/requirements.svg?branch=master)](https://requires.io/github/bwanglzu/Automatic_Question_Generation/requirements/?branch=master)
 
 Learning to generate Gap-Filling questions from teaching material.
 
