@@ -9,7 +9,7 @@ Learning to generate Gap-Filling questions from teaching material.
 
 ### Build Project
 
-- `git clone https://github.com/bwanglzu/Automatic_Question_Generation.git`
+- `git clone https://github.com/bwanglzu/Automatic-Question-Generation.git`
 - `cd Automatic_Question_Generation`
 - `pip install -r requirements.txt`
 
@@ -68,7 +68,11 @@ STANFORD_NER_CLASSPATH=/path-to-your-stanford-models/stanford-models/stanford-ne
 ## Performance:
 
 - Achieved 77% accuracy on training set.
-- Achieved 66% accuracy on 10-fold CV.
+- Achieved 64% accuracy on 10-fold CV (without parameter tunning).
+
+Learning curve:
+
+![performance](train_data/performance.png)
 
 ## Classifier Info:
 

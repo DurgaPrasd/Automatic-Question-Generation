@@ -710,5 +710,5 @@ class FeatureConstruction:
                     continue
             except:
                 continue
-        df = pd.concat(rows, axis=0)
-        return df
+        df = pd.concat(rows, axis=1)
+        return df.transpose()
