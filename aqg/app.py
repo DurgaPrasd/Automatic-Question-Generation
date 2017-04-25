@@ -56,7 +56,8 @@ def _classify(df):
     - Returns:
         question_answers(pandas.dataframe): Question, Answer, Prediction (label)
     """
-    clf = joblib.load(os.path.dirname(__file__) + "/models/clf.pkl")
+    model_path = os.path.dirname(os.path.abspath(__file__)) + '/models/clf.pkl'
+    clf = joblib.load(model_path)
     question_answers = df[['Question', 'Answer']]
     X = df.drop(['Answer', 'Question', 'Sentence'], axis=1).as_matrix()
     y = clf.predict(X)
@@ -69,3 +70,4 @@ if __name__ == '__main__':
     parser.add_argument("-f", "--input", help="input document")
     args = parser.parse_args()
     print pipeline(args.input)
+    print "0: bad question; 1: okay question; 2: good question"
