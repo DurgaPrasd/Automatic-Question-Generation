@@ -1,7 +1,7 @@
 # Automatic Gap-Filling Question Generator
 
+[![codecov](https://codecov.io/gh/bwanglzu/Automatic-Question-Generation/branch/master/graph/badge.svg)](https://codecov.io/gh/bwanglzu/Automatic-Question-Generation)
 [![Requirements Status](https://requires.io/github/bwanglzu/Automatic-Question-Generation/requirements.svg?branch=master)](https://requires.io/github/bwanglzu/Automatic-Question-Generation/requirements/?branch=master)
-[![codecov](https://codecov.io/gh/bwanglzu/Automatic_Question_Generation/branch/master/graph/badge.svg)](https://codecov.io/gh/bwanglzu/Automatic_Question_Generation)
 
 Learning to generate Gap-Filling questions from teaching material.
 
